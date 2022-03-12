@@ -44,13 +44,14 @@ spec:
         image: nginx:latest
         ports:
         - containerPort: 80
+        volumeMounts:
+          - mountPath: "/usr/share/nginx/html"
+            name: website
       volumes:
         - name: website
           persistentVolumeClaim:
             claimName: testvolumeclaim
-        volumeMounts:
-          - mountPath: "/usr/share/nginx/html"
-            name: website
+        
 ---
 apiVersion: v1
 kind: Service
