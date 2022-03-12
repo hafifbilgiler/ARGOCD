@@ -1,4 +1,3 @@
----
 kind: PersistentVolume
 apiVersion: v1
 metadata:
@@ -22,7 +21,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Mi
+     storage: 100Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
