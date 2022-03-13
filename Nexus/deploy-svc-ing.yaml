@@ -39,7 +39,7 @@ kind: Ingress
 metadata:
   name: nexus
 spec:
-  ingressClassName: nexus
+  ingressClassName: nginx
   rules:
   - host: nexus-app.192.168.56.110.nip.io
     http:
