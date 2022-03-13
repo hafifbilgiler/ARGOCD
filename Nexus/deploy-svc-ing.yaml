@@ -18,10 +18,7 @@ spec:
       - name: nexus
         image: sonatype/nexus3
         ports:
-          - containerPort: 8080
-        env:
-        - name: NSTALL4J_ADD_VM_PARAMS
-          value: "-Xms2703m -Xmx2703m -XX:MaxDirectMemorySize=2703m"
+          - containerPort: 8081
 ---
 apiVersion: v1
 kind: Service
@@ -31,7 +28,7 @@ metadata:
     app: nexus
 spec:
   ports:
-  - port: 80
+  - port: 8081
     protocol: TCP
   selector:
     app: nexus
