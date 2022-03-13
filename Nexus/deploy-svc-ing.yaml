@@ -18,6 +18,7 @@ spec:
       - name: nexus
         image: sonatype/nexus3
         ports:
+          - containerPort: 8080
       env:
        key: NSTALL4J_ADD_VM_PARAMS
        value: "-Xms2703m -Xmx2703m -XX:MaxDirectMemorySize=2703m"
