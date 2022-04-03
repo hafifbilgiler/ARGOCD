@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nexus
+  name: nginx-deployment
   labels:
-    app: nexus
+    app: nginx
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: nexus
+      app: nginx
   template:
     metadata:
       labels:
-        app: nexus
+        app: nginx
     spec:
       containers:
-      - name: nexus
-        image: sonatype/nexus3
+      - name: nginx
+        image: nginx:1.7.9
         ports:
-          - containerPort: 8081
+        - containerPort: 80
