@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app: nexus
-    spec:
+    spec: # we must add init container to solving permiision denied messages fo log files
       initContainers:
       - name: volume-mount-hack
         image: busybox
