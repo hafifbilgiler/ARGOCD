@@ -21,3 +21,10 @@ spec:
         image: sonatype/nexus3
         ports:
           - containerPort: 8081
+        volumeMounts:
+        - name: nexus
+          mountPath: /nexus-data
+      volumes:
+      - name: nexus
+        persistentVolumeClaim:
+          claimName: nexus
