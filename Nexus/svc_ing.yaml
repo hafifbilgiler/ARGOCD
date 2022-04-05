@@ -32,5 +32,9 @@ spec:
               number: 80
         path: /
         pathType: Prefix
+  tls:
+  - hosts:
+    - nexus-app.34.125.89.152.nip.io
+    secretName: nexus-secret4ssl
 status:
   loadBalancer: {}
