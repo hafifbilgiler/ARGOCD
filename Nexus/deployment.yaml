@@ -39,4 +39,4 @@ spec:
       volumes:
       - name: nexus
         persistentVolumeClaim:
-          claimName: nexus
+          claimName: nexus-1
