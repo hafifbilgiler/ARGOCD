@@ -35,6 +35,6 @@ spec:
   tls:
   - hosts:
     - nexus-app.34.125.89.152.nip.io
-    secretName: nexus-secret4ssl11
+    secretName: nexus-secret4ssl-1
 status:
   loadBalancer: {}
