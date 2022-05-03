@@ -10,6 +10,8 @@ spec:
   ports:
   - port: 8081
     protocol: TCP
+  - port: 8080
+    protocol: TCP
   selector:
     app: nexus
   type: NodePort

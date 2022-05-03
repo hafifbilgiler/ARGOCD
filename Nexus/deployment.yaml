@@ -28,6 +28,9 @@ spec:
         image: sonatype/nexus3
         ports:
           - containerPort: 8081
+            name: default
+          - containerPort: 8080
+            name: specific
         env:
         - name: INSTALL4J_ADD_VM_PARAMS
           value: "-Xms1024m -Xmx1204m -XX:MaxDirectMemorySize=1024m"
