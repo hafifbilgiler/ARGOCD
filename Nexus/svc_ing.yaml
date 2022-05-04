@@ -40,5 +40,19 @@ spec:
   - hosts:
     - nexus-app.34.125.89.152.nip.io
     secretName: nexus-secret4ssl-2
+  - host: nexus-app.34.125.89.152.nip.io
+    http:
+      paths:
+      - backend:
+          service:
+            name: nexus
+            port:
+              number: 8080
+        path: /repo
+        pathType: Prefix  
+  tls:
+  - hosts:
+    - nexus-app.34.125.89.152.nip.io
+    secretName: nexus-secret4ssl-2
 status:
   loadBalancer: {}
