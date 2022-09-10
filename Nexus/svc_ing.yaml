@@ -26,7 +26,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: nexus-app.34.125.89.152.nip.io
+  - host: nexus-app.192.168.56.102.nip.io
     http:
       paths:
       - backend:
@@ -45,7 +45,7 @@ spec:
         pathType: ImplementationSpecific
   tls:
   - hosts:
-    - nexus-app.34.125.89.152.nip.io
+    - nexus-app.192.168.56.102.nip.io
     secretName: nexus-secret4ssl-2
 status:
   loadBalancer: {}
