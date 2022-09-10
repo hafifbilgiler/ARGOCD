@@ -33,7 +33,7 @@ spec:
             name: specific
         env:
         - name: INSTALL4J_ADD_VM_PARAMS
-          value: "-Xms2048m -Xmx2048m -XX:MaxDirectMemorySize=2048m"
+          value: "-Xms1500m -Xmx1500m -XX:MaxDirectMemorySize=1500m"
         volumeMounts:
         - name: nexus
           mountPath: /nexus-data
