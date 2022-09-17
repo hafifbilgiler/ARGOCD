@@ -43,7 +43,7 @@ metadata:
     app: mysql
 spec:
   ports:
-  - port: 8081
+  - port: 1433
     protocol: TCP
     name: default
   - port: 8080
