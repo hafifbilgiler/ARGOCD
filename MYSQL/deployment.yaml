@@ -4,6 +4,11 @@ kind: Namespace
 metadata:
   name: mysql
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mariadb
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -33,7 +38,6 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           value: eight
 ---
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -51,4 +55,57 @@ spec:
     name: mysql
   selector:
     app: mysql
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb
+  labels:
+    app: mariadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+      - name: mariadb
+        image: linuxserver/mariadb
+        ports:
+        - containerPort: 3306
+        env:
+        - name: PUID
+          value: "1001"
+        - name: PGID
+          value: "986"
+        - name: MYSQL_ROOT_PASSWORD
+          value: "mariadb"
+        - name: MYSQL_DATABASE
+          value: "mariadb"
+        - name: MYSQL_USER
+          value: "mariadb"  
+        - name: MYSQL_PASSWORD
+          value: "mariadb"
+        - name: TZ
+          value: "Europe/London"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: mariadb
+  name: mariadb
+  labels:
+    app: mariadb
+spec:
+  ports:
+  - port: 3306
+    protocol: TCP
+    name: default
+  selector:
+    app: mariadb
   type: NodePort
