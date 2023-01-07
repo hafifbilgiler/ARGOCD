@@ -31,6 +31,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: mariadb
   name: mariadb
   labels:
     app: mariadb
@@ -80,4 +81,3 @@ spec:
   selector:
     app: mariadb
   type: NodePort
-  

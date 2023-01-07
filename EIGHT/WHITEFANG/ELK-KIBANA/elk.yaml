@@ -1,0 +1,149 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: elasticsearch
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: es01pv
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/opt/elasticsearch/es01"
+--- 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: es01pvc
+  namespace: elasticsearch
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: es-cluster
+  labels:
+    app: es-cluster
+spec:
+  selector:
+    app: es-cluster
+  clusterIP: None
+  ports:
+  - port: 9200
+    name: req
+  - port: 9300
+    name: inter-node
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: es-cluster
+  namespace: elasticsearch
+  labels:
+    app: es-cluster
+    app.kubernetes.io/name: elasticsearch
+    app.kubernetes.io/instance: elasticsearch-01 
+    app.kubernetes.io/version: "7.16.2"
+    app.kubernetes.io/component: indexingandsearch
+    app.kubernetes.io/part-of: logging
+    app.kubernetes.io/managed-by: kubectl
+    app.kubernetes.io/created-by: hands
+spec:
+  serviceName: es-cluster
+  replicas: 2
+  selector:
+    matchLabels:
+      app: es-cluster
+  template:
+    metadata:
+      labels:
+        app: es-cluster
+    spec:
+      serviceAccountName: privileged-sa
+      containers:
+      - name: es-cluster
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+        securityContext:
+          privileged: true
+        resources:
+            limits:
+              memory: "600Mi"
+              cpu: 500m
+            requests:
+              cpu: 300m
+              memory: "500Mi"
+        readinessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /_cluster/health?local=true
+            port: 9200
+          initialDelaySeconds: 5
+        ports:
+        - containerPort: 9200
+          name: req
+          protocol: TCP
+        - containerPort: 9300
+          name: inter-node
+          protocol: TCP
+        volumeMounts:
+        - name: data
+          mountPath: /usr/share/elasticsearch/data
+        env:
+          - name: cluster.name
+            value: es-cluster-ocp
+          - name: node.name              #get node name from metadata of pods.
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: discovery.seed_hosts
+            value: "es-cluster-0.es-cluster,es-cluster-1.es-cluster,es-cluster-2.es-cluster" # The pods can solve the redis pod aip address with podname.svc name default dns name of the pod: podname.namespace.service.svc.cluster.local
+          - name: cluster.initial_master_nodes
+            value: "es-cluster-0,es-cluster-1,es-cluster-2"
+          - name: ES_JAVA_OPTS
+            value: "-Xms1024m -Xmx1024m"
+          - name: xpack.security.enabled
+            value: "false"
+          - name: bootstrap.memory_lock
+            value: "false"
+      initContainers:
+      - name: fix-permissions
+        image: busybox
+        command: ["sh", "-c", "chown -R 1000:1000 /usr/share/elasticsearch/data"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: data
+          mountPath: /usr/share/elasticsearch/data
+      - name: increase-vm-max-map
+        image: busybox
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
+      - name: increase-fd-ulimit
+        image: busybox
+        command: ["sh", "-c", "ulimit -n 65536"]
+        securityContext:
+          privileged: true
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+      labels:
+        app: es-cluster
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "st-class-name"
+      resources:
+        requests:
+          storage: 1Gi
