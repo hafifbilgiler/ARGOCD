@@ -1,10 +1,15 @@
 ---
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: ansible
+---
+apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: create-namespace
   namespace: ansible
-automountServiceAccountToken: false
+automountServiceAccountToken: true
 ---
 apiVersion: v1
 kind: Secret
