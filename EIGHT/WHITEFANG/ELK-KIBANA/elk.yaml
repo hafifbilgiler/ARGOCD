@@ -67,11 +67,11 @@ spec:
           privileged: true
         resources:
             limits:
-              memory: "600Mi"
+              memory: "1200Mi"
               cpu: 500m
             requests:
-              cpu: 300m
-              memory: "500Mi"
+              cpu: 500m
+              memory: "1024Mi"
         readinessProbe:
           httpGet:
             scheme: HTTP
@@ -100,7 +100,7 @@ spec:
           - name: cluster.initial_master_nodes
             value: "es-cluster-0,es-cluster-1,es-cluster-2"
           - name: ES_JAVA_OPTS
-            value: "-Xms512m -Xmx512m"
+            value: "-Xms1024m -Xmx1024m"
           - name: xpack.security.enabled
             value: "false"
           - name: bootstrap.memory_lock
