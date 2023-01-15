@@ -131,7 +131,7 @@ spec:
         app: es-cluster
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "st-class-name"
+      storageClassName: "longhorn"
       resources:
         requests:
-          storage: 1Gi
+          storage: 2Gi
